@@ -42,6 +42,25 @@ app.use( (req, res, next) => {
 
     // Connect to a database or create one if it doesn't exist yet.
     const db = new Database('user.db');
+    // Is the database initialized or do we need to initialize it?
+    const stmt = db.prepare(`
+    SELECT name FROM sqlite_master WHERE type='table' and name='remoteuser';`
+    );
+    // Define row using `get()` from better-sqlite3
+    let row = stmt.get();
+    // Check if there is a table. If row is undefined then no table exists.
+    if (row === undefined) {
+        // Echo information about what you are doing to the console.
+       console.log('Your database appears to be empty. I will initialize it now.');
+        // Set a const that will contain your SQL commands to initialize the database.
+       const sqlInit = `
+       CREATE TABLE accesslog ( id INTEGER PRIMARY KEY, remoteaddr TEXT, remoteuser TEXT, time DATE, method TEXT, protocall TEXT, httpversion TEXT, status TEXT, referer TEXT, useragent TEXT);
+    `;
+        // Execute SQL commands that we just wrote above.
+       db.exec(sqlInit);
+        // Echo information about what we just did to the console.
+       console.log('Your database has been initialized with a new table and two entries containing a username and password.');
+    } 
 
     let logdata = {
         remoteaddr: req.ip,
@@ -65,6 +84,10 @@ app.use( (req, res, next) => {
     module.exports = db
     next();
 });
+
+app.get('/', (req, res) => {
+  throw new Error('Error test successful.') // Express will catch this on its own.
+})
 
 app.get('/app/', (req, res) => {
 	// Respond with status 200
