@@ -108,8 +108,8 @@ app.get('/app/flip/', (req, res) => {
 });
 
 app.get('/app/error/', (req, res) => {
-	res.status(404).send('Error test successful.')
-}
+	res.status(404).send('Error test successful.');
+});
 
 app.get('/app/flips/:number', (req, res) => {
 	var allFlips = coinFlips(req.params.number);
