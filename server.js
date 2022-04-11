@@ -36,6 +36,36 @@ const server = app.listen(HTTP_PORT, () => {
 });
 
 
+app.use( (req, res, next) => {
+    // Require better-sqlite.
+    const Database = require('better-sqlite3');
+
+    // Connect to a database or create one if it doesn't exist yet.
+    const db = new Database('user.db');
+
+    let logdata = {
+        remoteaddr: req.ip,
+        remoteuser: req.user,
+        time: Date.now(),
+        method: req.method,
+        url: req.url,
+        protocol: req.protocol,
+        httpversion: req.httpVersion,
+        status: res.statusCode,
+        referer: req.headers['referer'],
+        useragent: req.headers['user-agent']
+    }
+    const sqlInit = `
+        INSERT INTO accesslog(remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent);
+    `;
+    // Execute SQL commands that we just wrote above.
+    db.exec(sqlInit);
+    console.log('Inserted one record.')
+    // Export all of the above as a module so that we can use it elsewhere.
+    module.exports = db
+    next();
+});
+
 app.get('/app/', (req, res) => {
 	// Respond with status 200
 	console.log('fxn');
