@@ -112,6 +112,10 @@ app.get('/app/error/', (req, res) => {
 	res.status(404).send('Error test successful.');
 });
 
+app.get('/app/log/access', (req, res) => {
+	console.log('');
+});
+
 app.get('/app/flips/:number', (req, res) => {
 	var allFlips = coinFlips(req.params.number);
 	var count = countFlips(allFlips);
