@@ -78,7 +78,7 @@ app.use( (req, res, next) => {
     `;
     // Execute SQL commands that we just wrote above.
     console.log('SQL' + sqlInit);
-    db.exec(sqlInit);
+    //db.exec(sqlInit);
     console.log('Inserted one record.')
     // Export all of the above as a module so that we can use it elsewhere.
     module.exports = db
