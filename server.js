@@ -77,6 +77,7 @@ app.use( (req, res, next) => {
         INSERT INTO accesslog(remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (${logdata.remoteaddr}, ${logdata.remoteuser}, ${logdata.time}, ${logdata.method}, ${logdata.url}, ${logdata.protocol}, ${logdata.httpversion}, ${logdata.status}, ${logdata.referer}, ${logdata.useragent});
     `;
     // Execute SQL commands that we just wrote above.
+    console.log('SQL' + sqlInit);
     db.exec(sqlInit);
     console.log('Inserted one record.')
     // Export all of the above as a module so that we can use it elsewhere.
