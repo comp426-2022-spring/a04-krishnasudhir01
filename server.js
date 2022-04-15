@@ -119,7 +119,7 @@ app.get('/app/error/', (req, res) => {
 });
 
 app.get('/app/log/access', (req, res) => {
-	const stmt = db.prepare('SELECT * FROM accesslog).get();
+	const stmt = db.prepare('SELECT * FROM accesslog').get();
 	res.status(200).json(stmt);
 });
 
