@@ -57,7 +57,7 @@ app.use( (req, res, next) => {
        console.log('Your database appears to be empty. I will initialize it now.');
         // Set a const that will contain your SQL commands to initialize the database.
        const sqlInit = `
-       CREATE TABLE accesslog (remoteaddr TEXT, remoteuser TEXT, time DATE, method TEXT, url TEXT, protocol TEXT, httpversion TEXT, status TEXT, referer TEXT, useragent TEXT);
+       CREATE TABLE accesslog (id INTEGER PRIMARY KEY, remoteaddr TEXT, remoteuser TEXT, time DATE, method TEXT, url TEXT, protocol TEXT, httpversion TEXT, status TEXT, referer TEXT, useragent TEXT);
     `;
         // Execute SQL commands that we just wrote above.
        db.exec(sqlInit);
@@ -76,13 +76,10 @@ app.use( (req, res, next) => {
         referer: req.headers['referer'],
         useragent: req.headers['user-agent']
     }
-  //  const sqlInit = `
-//        INSERT INTO accesslog(remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (${logdata.remoteaddr}, ${logdata.remoteuser}, ${logdata.time}, ${logdata.method}, ${logdata.url}, ${logdata.protocol}, ${logdata.httpversion}, ${logdata.status}, ${logdata.referer}, ${logdata.useragent});
- //   `;
 
-const sqlInit = 'INSERT INTO accesslog(remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?,?,?,?,?,?,?,?,?,?)';
-const statement = db.prepare(sqlInit);
-statement.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent);
+    const sqlInit = 'INSERT INTO accesslog(remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    const statement = db.prepare(sqlInit);
+    statement.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent);
 
 
     // Execute SQL commands that we just wrote above.
@@ -122,7 +119,7 @@ app.get('/app/error/', (req, res) => {
 });
 
 app.get('/app/log/access', (req, res) => {
-	const stmt = db.prepare('SELECT * FROM accesslog').get();
+	const stmt = db.prepare('SELECT * FROM accesslog').all();
 	res.status(200).json(stmt);
 });
 
