@@ -119,7 +119,8 @@ app.get('/app/error/', (req, res) => {
 });
 
 app.get('/app/log/access', (req, res) => {
-	console.log('');
+	const stmt = db.prepare('SELECT * FROM accesslog).get();
+	res.status(200).json(stmt);
 });
 
 app.get('/app/flips/:number', (req, res) => {
