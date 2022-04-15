@@ -35,13 +35,16 @@ const server = app.listen(HTTP_PORT, () => {
 	console.log('App listening on port %PORT%'.replace('%PORT%', HTTP_PORT))
 });
 
+const Database = require('better-sqlite3');
+const db = new Database('user.db');
+
 
 app.use( (req, res, next) => {
     // Require better-sqlite.
-    const Database = require('better-sqlite3');
+    // const Database = require('better-sqlite3');
 
     // Connect to a database or create one if it doesn't exist yet.
-    const db = new Database('user.db');
+    // const db = new Database('user.db');
     // Is the database initialized or do we need to initialize it?
     const stmt = db.prepare(`
     SELECT name FROM sqlite_master WHERE type='table' and name='remoteuser';`
